@@ -3,6 +3,7 @@ from websocket import create_connection
 from typing import List, Dict
 import json
 from pprint import pp
+from loguru import logger
 
 class KrakenWebSocket:
 
@@ -37,10 +38,10 @@ class KrakenWebSocket:
 
         except Exception as e:
             # Handle exception
-            print(f"An error occurred whilist trying to Subscribe to the KrakenAPI WebSocket: {e}")
+            logger.error(f"An error occurred whilist trying to Subscribe to the KrakenAPI WebSocket: {e}")
         
         else:
-            print("Successfully Subscribed to the KrakenAPI WebSocket.")
+            logger.success("Successfully Subscribed to the KrakenAPI WebSocket.")
             #Then, Dumping the First 2 Useless Messages. Connection ID and Connection Status
             _ = self._ws.recv()
             _ = self._ws.recv()
@@ -50,7 +51,7 @@ class KrakenWebSocket:
         
         Message = self._ws.recv()
 
-        print(f'Message Received: {Message}')
+        logger.info(f'Message Received: {Message}')
 
         #Data is returned in the str format like as follows:
         #'{"channel":"trade","type":"update","data":[{"symbol":"BTC/USD","side":"sell","price":59121.8,"qty":0.00022946,"ord_type":"market","trade_id":72823289,"timestamp":"2024-08-12T19:38:30.575191Z"}]}''

@@ -1,4 +1,13 @@
-RmTradeProducerImage:
+StartTradeProducerContainer:
+	docker start tradeproducer
+
+StopTradeProducerContainer:
+	docker stop tradeproducer
+
+RmTradeProducerContainer:StopTradeProducerContainer
+	docker rm tradeproducer
+
+RmTradeProducerImage:RmTradeProducerContainer
 	docker rmi tradeproducer
 
 ComposeRedPanda:

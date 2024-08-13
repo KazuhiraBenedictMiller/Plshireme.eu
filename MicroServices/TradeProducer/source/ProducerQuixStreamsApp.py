@@ -6,6 +6,8 @@ from FetchTrades import KrakenWebSocket
 from typing import List, Dict
 from time import sleep
 
+from loguru import logger
+
 def ProduceTrades(
     kafka_broker_address: str,
     kafka_input_topic: str
