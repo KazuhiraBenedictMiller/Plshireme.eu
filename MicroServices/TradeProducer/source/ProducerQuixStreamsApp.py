@@ -61,6 +61,9 @@ def ProduceTrades(
 
 if __name__ == "__main__":
     ProduceTrades(
-        kafka_broker_address = "localhost:19092",
+        #External Port for Local Dev
+        #kafka_broker_address = "localhost:19092",
+        #Internal Port for Containerized Production on same Docker Network
+        kafka_broker_address = "redpanda-0:9092",
         kafka_input_topic = "Trades"
     )

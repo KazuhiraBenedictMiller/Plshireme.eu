@@ -1,12 +1,13 @@
-name: redpanda-trade-producer
+name: redpanda
 networks:
   redpanda_network:
+    name: redpanda-network
     driver: bridge
 volumes:
   redpanda-0: null
 services:
   redpanda-0:
-    container_name: redpanda-trade-producer-broker
+    container_name: redpanda-message-broker
     command:
       - redpanda
       - start
@@ -40,7 +41,7 @@ services:
       - 19092:19092
       - 19644:9644
   console:
-    container_name: redpanda-trade-producer-console
+    container_name: redpanda-broker-console
     image: docker.redpanda.com/redpandadata/console:v2.7.0
     networks:
       - redpanda_network
