@@ -6,6 +6,7 @@ RUN pip install poetry==1.8.3
 WORKDIR /app
 
 #First Copying and Installing Poetry Virtual Environment for faster build since most things can be Cached when rebuilding the image.
+#When copying more than a file, destination Dir must end with a Trailing /
 COPY pyproject.toml poetry.lock /app/
 
 #Install Poetry Virtual Environment and Dependencies
