@@ -1,6 +1,7 @@
 # Create an Application instance with Kafka configs
 from typing import Dict, List
 
+import Config
 from FetchTrades import KrakenWebSocket
 from quixstreams import Application
 
@@ -19,7 +20,8 @@ def ProduceTrades(kafka_broker_address: str, kafka_input_topic: str) -> None:
 
     # Defining the Application
     app = Application(
-        broker_address=kafka_broker_address, consumer_group='TradeProducer'
+        broker_address=kafka_broker_address,
+        consumer_group=Config.TradeProducerConsumerGroup,
     )
 
     # Defining the topic with JSON serialization where we'll save the Trades
@@ -28,12 +30,12 @@ def ProduceTrades(kafka_broker_address: str, kafka_input_topic: str) -> None:
     # Fake Test Event
     # event = {"id": "1", "text": "Lorem ipsum dolor sit amet"}
 
-    productid = 'BTC/USD'
-    URL = 'wss://ws.kraken.com/v2'
-    channel = 'trade'
+    productid = Config.ProductID
+    URL = Config.KrakenWebSocketURL
+    channel = Config.KrakenWebSocketChannel
 
     # Establishing Kraken WebSocket Connection
-    KrakenAPI = KrakenWebSocket(product_id='BTC/USD', URL=URL, channel=channel)
+    KrakenAPI = KrakenWebSocket(product_id=productid, URL=URL, channel=channel)
     # KrakenAPI.Subscibe() <--- Added to init Method of Class
 
     # Creating a Producer instance
@@ -55,6 +57,6 @@ if __name__ == '__main__':
         # External Port for Local Dev
         # kafka_broker_address = "localhost:19092",
         # Internal Port for Containerized Production on same Docker Network
-        kafka_broker_address='redpanda-0:9092',
-        kafka_input_topic='Trades',
+        kafka_broker_address=Config.KafkaBrokerAddress,
+        kafka_input_topic=Config.KafkaInputTopic,
     )

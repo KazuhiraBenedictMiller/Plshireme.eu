@@ -1,5 +1,11 @@
 FROM python:3.11-slim-bookworm
 
+#Adding /app to the PYTHONPATH to import config module containing Parametrized Values
+ENV PYTHONPATH=/app
+
+#Setting PYTHONBUFFERED to stream Python Output to the Console
+ENV PYTHONBUFFERED=1
+
 #Setting up Poetry with specific version as localhost, to ensure nothing breaks or conflicts - we want the build to be Fully Reproducible.
 RUN pip install poetry==1.8.3
 
