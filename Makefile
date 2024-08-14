@@ -7,7 +7,7 @@ StopTradeProducerContainer:
 RmTradeProducerContainer:StopTradeProducerContainer
 	docker rm tradeproducer
 
-RmTradeProducerImage:RmTradeProducerContainer
+RmTradeProducerImage:StopTradeProducerContainer:RmTradeProducerContainer
 	docker rmi tradeproducer
 
 ComposeRedPanda:
