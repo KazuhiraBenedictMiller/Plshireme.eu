@@ -1,12 +1,12 @@
 import os
 
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 
 # Dinamically Crawl in search of a .env file
-# load_dotenv(find_dotenv())
+load_dotenv(find_dotenv())
 
 # Or Declaratively
-load_dotenv('../.env')
+# load_dotenv('../.env')
 
 TradeProducerConsumerGroup = 'TradeProducer'
 ProductID = 'BTC/USD'
