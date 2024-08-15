@@ -1,2 +1,4 @@
 MicroServices/TradeProducer/source/__pycache__/
 MicroServices/TradeProducer/ruff_cache/
+MicroServices/TradeProducer/.env
+MicroServices/TradeProducer/tests/
