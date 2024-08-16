@@ -1,7 +1,7 @@
 # Create an Application instance with Kafka configs
 from typing import Dict, List
 
-import Config
+from Config import Config
 from FetchTrades import KrakenWebSocket
 from quixstreams import Application
 

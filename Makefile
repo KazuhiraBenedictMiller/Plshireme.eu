@@ -22,6 +22,9 @@ ShutDownRedPanda:
 BuildTradeProducerContainer:
 	docker build -t tradeproducer ./MicroServices/TradeProducer -f ./MicroServices/TradeProducer/TradeProducer.Dockerfile
 
+RebuildTradeProducerContainer: RmTradeProducerImage RunTradeProducerContainer
+	@echo "Rebuilt Image and ReRun Trade Producer Container"
+
 BuildLiteTradeProducerContainer:
 	DOCKER_BUILDKIT=1 docker build --target=Runtime -t litetradeproducer ./MicroServices/TradeProducer -f ./MicroServices/TradeProducer/LiteProducer.Dockerfile
 
@@ -35,11 +38,11 @@ FormatCode:
 	cd ./MicroServices/TradeProducer && poetry run ruff format
 
 StartUp: ComposeRedPanda RunTradeProducerContainer
-	echo "Containers Fired Up, here are the Logs"
+	@echo "Containers Fired Up, here are the Logs"
 	docker ps -a
 	docker logs tradeproducer
 
 ShutDown: RmTradeProducerImage ShutDownRedPanda	
-	echo "Everything Shut Down"
+	@echo "Everything Shut Down"
 	docker images
 	docker ps -a 
