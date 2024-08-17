@@ -2,3 +2,4 @@ README.md
 tests/
 .ruff_cache/
 sample.env
+state/

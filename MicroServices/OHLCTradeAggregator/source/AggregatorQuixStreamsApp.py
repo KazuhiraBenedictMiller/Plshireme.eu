@@ -84,8 +84,8 @@ def AggregateOHLC(
 
     # Apply Transformations to Incoming Data with Tumbling Window
     sdf = (
-        #Setting Up Tumbling Window Processing
-        sdf.tumbling_window(duration_ms=timedelta(seconds = Config.WindowSecondsOHLC))
+        # Setting Up Tumbling Window Processing
+        sdf.tumbling_window(duration_ms=timedelta(seconds=Config.WindowSecondsOHLC))
         # Actual Transformation to OHLC with Initializer and Reducer Functions
         .reduce(reducer=UpdateOHLCCandle, initializer=InitOHLCCandle)
         # Only Emit Final Values when Window is Closed
@@ -94,8 +94,8 @@ def AggregateOHLC(
 
     # Logging
     sdf = sdf.update(logger.info)
-    
-    #Pushing Candles to Topic
+
+    # Pushing Candles to Topic
     sdf = sdf.to_topic(output_topic)
 
     # Running the App
@@ -106,6 +106,6 @@ if __name__ == '__main__':
     AggregateOHLC(
         kafka_input_topic=Config.KafkaInputTopic,
         kafka_output_topic=Config.KafkaOutputTopic,
-        kafka_broker_address='localhost:19092',#Config.KafkaBrokerAddress,
+        kafka_broker_address='localhost:19092',  # Config.KafkaBrokerAddress,
         ohlc_tumblingwindow_secs=Config.WindowSecondsOHLC,
     )
