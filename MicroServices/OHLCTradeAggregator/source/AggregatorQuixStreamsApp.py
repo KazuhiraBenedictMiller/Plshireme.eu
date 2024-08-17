@@ -103,6 +103,9 @@ def AggregateOHLC(
     sdf['low'] = sdf['value']['open']
     sdf['close'] = sdf['value']['open']
 
+    # Keeping only Columns we care about in our message before pushing it to Output Topic
+    sdf = sdf[['productid', 'timestamp', 'open', 'high', 'low', 'close']]
+
     # Logging
     sdf = sdf.update(logger.info)
 
