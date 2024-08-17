@@ -6,4 +6,4 @@ MicroServices/OHLCTradeAggregator/source/__pycache__/
 MicroServices/OHLCTradeAggregator/ruff_cache/
 MicroServices/OHLCTradeAggregator/.env
 MicroServices/OHLCTradeAggregator/tests/
-MicroServices/OHLCTradeAggregator/state/
+MicroServices/OHLCTradeAggregator/state/*
