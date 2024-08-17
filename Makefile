@@ -33,9 +33,12 @@ RunTradeProducerContainer: ComposeRedPanda BuildTradeProducerContainer
 
 LintCode:
 	cd ./MicroServices/TradeProducer && poetry run ruff check --fix
+	pwd
+	cd ./MicroServices/OHLCTradeAggregator && poetry run ruff check --fix
 
 FormatCode:
 	cd ./MicroServices/TradeProducer && poetry run ruff format
+	cd ./MicroServices/OHLCTradeAggregator && poetry run ruff format
 
 StartUp: ComposeRedPanda RunTradeProducerContainer
 	@echo "Containers Fired Up, here are the Logs"

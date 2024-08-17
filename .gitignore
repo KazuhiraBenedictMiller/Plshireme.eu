@@ -2,3 +2,7 @@ MicroServices/TradeProducer/source/__pycache__/
 MicroServices/TradeProducer/ruff_cache/
 MicroServices/TradeProducer/.env
 MicroServices/TradeProducer/tests/
+MicroServices/OHLCTradeAggregator/source/__pycache__/
+MicroServices/OHLCTradeAggregator/ruff_cache/
+MicroServices/OHLCTradeAggregator/.env
+MicroServices/OHLCTradeAggregator/tests/

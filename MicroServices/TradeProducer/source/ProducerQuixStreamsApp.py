@@ -25,7 +25,7 @@ def ProduceTrades(kafka_broker_address: str, kafka_input_topic: str) -> None:
     )
 
     # Defining the topic with JSON serialization where we'll save the Trades
-    topic = app.topic(name=kafka_input_topic, value_serializer='json')
+    input_topic = app.topic(name=kafka_input_topic, value_serializer='json')
 
     # Fake Test Event
     # event = {"id": "1", "text": "Lorem ipsum dolor sit amet"}
@@ -46,10 +46,12 @@ def ProduceTrades(kafka_broker_address: str, kafka_input_topic: str) -> None:
 
             for T in Trades:
                 # Serializing the event using the defined Topic
-                message = topic.serialize(key=T['product_id'], value=T)
+                message = input_topic.serialize(key=T['product_id'], value=T)
 
                 # Producing a message into the Kafka topic
-                producer.produce(topic=topic.name, value=message.value, key=message.key)
+                producer.produce(
+                    topic=input_topic.name, value=message.value, key=message.key
+                )
 
 
 if __name__ == '__main__':
