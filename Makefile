@@ -40,6 +40,9 @@ FormatCode:
 	cd ./MicroServices/TradeProducer && poetry run ruff format
 	cd ./MicroServices/OHLCTradeAggregator && poetry run ruff format
 
+TerminalIntoTradeProducer:
+	docker exec -it tradeproducer /bin/bash
+
 StartUp: ComposeRedPanda RunTradeProducerContainer
 	@echo "Containers Fired Up, here are the Logs"
 	docker ps -a

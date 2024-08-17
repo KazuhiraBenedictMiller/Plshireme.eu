@@ -19,6 +19,7 @@ def InitOHLCCandle(Trade: Dict) -> Dict:
     """
 
     return {
+        'productid': Trade['productid'],
         'timestamp': Trade['timestamp'],
         'open': Trade['price'],
         'high': Trade['price'],
@@ -40,6 +41,8 @@ def UpdateOHLCCandle(ActualCandle: Dict, Trade: Dict) -> Dict:
     """
 
     return {
+        'productid': Trade['productid'],
+        #'timestamp': Trade['timestamp'],
         'open': ActualCandle['open'],
         'high': max(ActualCandle['high'], Trade['price']),
         'low': min(ActualCandle['low'], Trade['price']),
@@ -92,6 +95,14 @@ def AggregateOHLC(
         .final()
     )
 
+    # Changing Data Format of our Candles
+    sdf['productid'] = sdf['value']['productid']
+    sdf['timestamp'] = sdf['start']
+    sdf['open'] = sdf['value']['open']
+    sdf['high'] = sdf['value']['open']
+    sdf['low'] = sdf['value']['open']
+    sdf['close'] = sdf['value']['open']
+
     # Logging
     sdf = sdf.update(logger.info)
 
@@ -106,6 +117,6 @@ if __name__ == '__main__':
     AggregateOHLC(
         kafka_input_topic=Config.KafkaInputTopic,
         kafka_output_topic=Config.KafkaOutputTopic,
-        kafka_broker_address='localhost:19092',  # Config.KafkaBrokerAddress,
+        kafka_broker_address=Config.KafkaBrokerAddress,
         ohlc_tumblingwindow_secs=Config.WindowSecondsOHLC,
     )
