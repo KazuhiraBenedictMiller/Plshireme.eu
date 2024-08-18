@@ -47,13 +47,15 @@ class KrakenWebSocket:
     def FetchTrades(self) -> List[Dict]:
         Message = self._ws.recv()
 
-        logger.info(f'Message Received: {Message}')
+        # logger.info(f'Message Received: {Message}')
 
         # Data is returned in the str format like as follows:
         #'{"channel":"trade","type":"update","data":[{"symbol":"BTC/USD","side":"sell","price":59121.8,"qty":0.00022946,"ord_type":"market","trade_id":72823289,"timestamp":"2024-08-12T19:38:30.575191Z"}]}''
 
         # Now, checking if the there is any data in the message or if it contains the heartbeat (no Data Update)
         if 'heartbeat' in Message:
+            logger.info('Heartbeat')
+
             # Rerutning an Empty List
             return []
 
@@ -71,6 +73,8 @@ class KrakenWebSocket:
                         'timestamp': trade['timestamp'],
                     }
                 )
+
+            logger.info(f'Pushed to Topic: {Trades}')
 
             # pp(Message)
 
