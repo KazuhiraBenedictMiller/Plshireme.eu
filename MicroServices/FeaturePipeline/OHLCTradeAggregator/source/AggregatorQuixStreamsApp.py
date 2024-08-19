@@ -25,6 +25,7 @@ def InitOHLCCandle(Trade: Dict) -> Dict:
         'high': Trade['price'],
         'low': Trade['price'],
         'close': Trade['price'],
+        'volume': Trade['volume'],
     }
 
 
@@ -47,6 +48,7 @@ def UpdateOHLCCandle(ActualCandle: Dict, Trade: Dict) -> Dict:
         'high': max(ActualCandle['high'], Trade['price']),
         'low': min(ActualCandle['low'], Trade['price']),
         'close': Trade['price'],
+        'volume': ActualCandle['volume'] + Trade['volume'],
     }
 
 
@@ -95,16 +97,21 @@ def AggregateOHLC(
         .final()
     )
 
+    # Same as Above, just Coded Differently
+    # sdf = sdf.tumbling_window(duration_ms=timedelta(seconds=Config.WindowSecondsOHLC))
+    # sdf = sdf.reduce(reducer=UpdateOHLCCandle, initializer=InitOHLCCandle).final()
+
     # Changing Data Format of our Candles, Timestamp is UTC
     sdf['product_id'] = sdf['value']['product_id']
     sdf['timestamp'] = sdf['start']
     sdf['open'] = sdf['value']['open']
-    sdf['high'] = sdf['value']['open']
-    sdf['low'] = sdf['value']['open']
-    sdf['close'] = sdf['value']['open']
+    sdf['high'] = sdf['value']['high']
+    sdf['low'] = sdf['value']['low']
+    sdf['close'] = sdf['value']['close']
+    sdf['volume'] = sdf['value']['volume']
 
     # Keeping only Columns we care about in our message before pushing it to Output Topic
-    sdf = sdf[['product_id', 'timestamp', 'open', 'high', 'low', 'close']]
+    sdf = sdf[['product_id', 'timestamp', 'open', 'high', 'low', 'close', 'volume']]
 
     # Logging
     sdf = sdf.update(logger.info)

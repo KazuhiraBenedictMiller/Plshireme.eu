@@ -3,29 +3,29 @@
 #------------------------#
 
 LintCode:
-	@cd ./MicroServices/TradeProducer && poetry run ruff check --fix
-	@cd ./MicroServices/OHLCTradeAggregator && poetry run ruff check --fix
+	@cd ./MicroServices/FeaturePipeline/TradeProducer && poetry run ruff check --fix
+	@cd ./MicroServices/FeaturePipeline/OHLCTradeAggregator && poetry run ruff check --fix
 
 FormatCode:
-	@cd ./MicroServices/TradeProducer && poetry run ruff format
-	@cd ./MicroServices/OHLCTradeAggregator && poetry run ruff format
+	@cd ./MicroServices/FeaturePipeline/TradeProducer && poetry run ruff format
+	@cd ./MicroServices/FeaturePipeline/OHLCTradeAggregator && poetry run ruff format
 
 #------------------------------#
 # Compose RedPanda Up and Down #
 #------------------------------#
 
 ComposeRedPanda:
-	@docker compose -f ./MicroServices/RedPanda.yml up -d
+	@docker compose -f ./MicroServices/RedPandaKafkaBroker/RedPanda.yml up -d
 
 ShutDownRedPanda:
-	@docker compose -f ./MicroServices/RedPanda.yml down
+	@docker compose -f ./MicroServices/RedPandaKafkaBroker/RedPanda.yml down
 
 #---------------------------------#
 # MicroServices -  Trade Producer #
 #---------------------------------#
 
 BuildTradeProducerContainer:
-	docker build -t tradeproducer ./MicroServices/TradeProducer -f ./MicroServices/TradeProducer/TradeProducer.Dockerfile
+	docker build -t tradeproducer ./MicroServices/FeaturePipeline/TradeProducer -f ./MicroServices/FeaturePipeline/TradeProducer/TradeProducer.Dockerfile
 
 RunTradeProducerContainer: ComposeRedPanda BuildTradeProducerContainer
 	docker run --network redpanda-network --name tradeproducer -d -it tradeproducer
@@ -46,7 +46,7 @@ RebuildTradeProducerContainer: RmTradeProducerImage RunTradeProducerContainer
 	@echo "Rebuilt Image and ReRan Trade Producer Container"
 
 BuildLiteTradeProducerContainer:
-	DOCKER_BUILDKIT=1 docker build --target=Runtime -t litetradeproducer ./MicroServices/TradeProducer -f ./MicroServices/TradeProducer/LiteProducer.Dockerfile
+	DOCKER_BUILDKIT=1 docker build --target=Runtime -t litetradeproducer ./MicroServices/FeaturePipeline/TradeProducer -f ./MicroServices/FeaturePipeline/TradeProducer/LiteProducer.Dockerfile
 
 RmLiteProducerImage: 
 	docker rmi litetradeproducer
@@ -59,7 +59,7 @@ TerminalIntoTradeProducer:
 #-----------------------------------#
 
 BuildTradeAggregatorContainer:
-	docker build -t tradeaggregator ./MicroServices/OHLCTradeAggregator -f ./MicroServices/OHLCTradeAggregator/TradeAggregator.Dockerfile
+	docker build -t tradeaggregator ./MicroServices/FeaturePipeline/OHLCTradeAggregator -f ./MicroServices/FeaturePipeline/OHLCTradeAggregator/TradeAggregator.Dockerfile
 
 RunTradeAggregatorContainer: ComposeRedPanda BuildTradeAggregatorContainer
 	docker run --network redpanda-network --name tradeaggregator -d -it tradeaggregator
@@ -80,7 +80,7 @@ RebuildTradeAggregatorContainer: RmTradeAggregatorImage RunTradeAggregatorContai
 	@echo "Rebuilt Image and ReRan Trade Aggregator Container"
 
 BuildLiteTradeAggregatorContainer:
-	DOCKER_BUILDKIT=1 docker build --target=Runtime -t litetradeaggregator ./MicroServices/OHLCTradeAggregator -f ./MicroServices/OHLCTradeAggregator/LiteAggregator.Dockerfile
+	DOCKER_BUILDKIT=1 docker build --target=Runtime -t litetradeaggregator ./MicroServices/FeaturePipeline/OHLCTradeAggregator -f ./MicroServices/FeaturePipeline/OHLCTradeAggregator/LiteAggregator.Dockerfile
 
 RmLiteAggregatorImage: 
 	docker rmi litetradeaggregator
