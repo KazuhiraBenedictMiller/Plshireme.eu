@@ -4,3 +4,4 @@ tests/
 TradeProducer.Dockerfile
 LiteProducer.Dockerfile
 sample.env
+source/__pycache__/*

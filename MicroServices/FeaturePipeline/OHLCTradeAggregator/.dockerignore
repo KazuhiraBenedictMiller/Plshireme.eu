@@ -1,5 +1,8 @@
 README.md
 tests/
 .ruff_cache/
+TradeAggregator.Dockerfile
+LiteAggregator.Dockerfile
 sample.env
 state/
+source/__pycache__/*
