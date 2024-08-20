@@ -2,6 +2,7 @@ from datetime import timedelta
 from typing import Dict
 
 from Config import Config
+
 from loguru import logger
 from quixstreams import Application
 
@@ -25,7 +26,7 @@ def InitOHLCCandle(Trade: Dict) -> Dict:
         'high': Trade['price'],
         'low': Trade['price'],
         'close': Trade['price'],
-        'volume': Trade['volume']
+        'volume': Trade['volume'],
     }
 
 
@@ -48,7 +49,7 @@ def UpdateOHLCCandle(ActualCandle: Dict, Trade: Dict) -> Dict:
         'high': max(ActualCandle['high'], Trade['price']),
         'low': min(ActualCandle['low'], Trade['price']),
         'close': Trade['price'],
-        'volume': ActualCandle['volume'] + Trade['volume']
+        'volume': ActualCandle['volume'] + Trade['volume'],
     }
 
 

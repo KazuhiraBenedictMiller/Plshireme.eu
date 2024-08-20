@@ -1,0 +1,7 @@
+README.md
+tests/
+.ruff_cache/
+KafkaToFS.Dockerfile
+LiteKafkaToFS.Dockerfile
+sample.env
+source/__pycache__/*

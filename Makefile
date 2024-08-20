@@ -5,10 +5,12 @@
 LintCode:
 	@cd ./MicroServices/FeaturePipeline/TradeProducer && poetry run ruff check --fix
 	@cd ./MicroServices/FeaturePipeline/OHLCTradeAggregator && poetry run ruff check --fix
+	@cd ./MicroServices/FeaturePipeline/KafkaToFeatureStore && poetry run ruff check --fix
 
 FormatCode:
 	@cd ./MicroServices/FeaturePipeline/TradeProducer && poetry run ruff format
 	@cd ./MicroServices/FeaturePipeline/OHLCTradeAggregator && poetry run ruff format
+	@cd ./MicroServices/FeaturePipeline/KafkaToFeatureStore && poetry run ruff format
 
 #------------------------------#
 # Compose RedPanda Up and Down #
@@ -88,17 +90,52 @@ RmLiteAggregatorImage:
 TerminalIntoTradeAggregator:
 	docker exec -it -u root tradeaggregator /bin/bash
 
+#--------------------------------------#
+# MicroServices -  KafkaToFeatureStore #
+#--------------------------------------#
+
+BuildKafkaToFSContainer:
+	docker build -t kafkatofs ./MicroServices/FeaturePipeline/KafkaToFeatureStore -f ./MicroServices/FeaturePipeline/KafkaToFeatureStore/KafkaToFS.Dockerfile
+
+RunKafkaToFSContainer: ComposeRedPanda BuildKafkaToFSContainer
+	docker run --network redpanda-network --name kafkatofs -d -it kafkatofs
+
+StartKafkaToFSContainer:
+	docker start kafkatofs
+
+StopKafkaToFSContainer:
+	docker stop kafkatofs
+
+RmKafkaToFSContainer: StopKafkaToFSContainer
+	docker rm kafkatofs
+
+RmKafkaToFSImage: StopKafkaToFSContainer RmKafkaToFSContainer
+	docker rmi kafkatofs
+
+RebuildKafkaToFSContainer: RmKafkaToFSImage RunKafkaToFSContainer
+	@echo "Rebuilt Image and ReRan Kafka To Feature Store Container"
+
+BuildLiteKafkaToFSContainer:
+	DOCKER_BUILDKIT=1 docker build --target=Runtime -t litekafkatofs ./MicroServices/FeaturePipeline/KafkaToFeatureStore -f ./MicroServices/FeaturePipeline/KafkaToFeatureStore/LiteKafkaToFS.Dockerfile
+
+RmLiteKafkaToFSImage: 
+	docker rmi litekafkatofs
+	
+TerminalIntoKafkaToFS:
+	docker exec -it -u root kafkatofs /bin/bash
+
 #------------------------#
 # Bundles and Wrapped Up #
 #------------------------#
 
-StartUp: ComposeRedPanda RunTradeProducerContainer RunTradeAggregatorContainer
+StartUp: ComposeRedPanda RunTradeProducerContainer RunTradeAggregatorContainer RunKafkaToFSContainer
 	@echo "Containers Fired Up, here are the Logs"
 	docker ps -a
 	docker logs tradeproducer
 	docker logs tradeaggregator
+	docker logs kafkatofs
 
-ShutDown: RmTradeProducerImage RmTradeAggregatorImage ShutDownRedPanda	
+ShutDown: RmTradeProducerImage RmTradeAggregatorImage RmKafkaToFSImage ShutDownRedPanda	
 	@echo "Everything Shat Down"
 	docker images
 	docker ps -a 

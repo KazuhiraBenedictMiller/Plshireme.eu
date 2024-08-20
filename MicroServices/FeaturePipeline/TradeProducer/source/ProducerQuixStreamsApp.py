@@ -41,7 +41,7 @@ def ProduceTrades(kafka_broker_address: str, kafka_input_topic: str) -> None:
     # Creating a Producer instance
     with app.get_producer() as producer:
         while True:
-            # getting Trades
+            # Getting Trades
             Trades: List[Dict] = KrakenAPI.FetchTrades()
 
             for T in Trades:
