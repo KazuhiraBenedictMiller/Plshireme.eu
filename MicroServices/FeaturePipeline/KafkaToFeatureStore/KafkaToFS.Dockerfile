@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libssl-dev \
     python3-dev \
+    gcc \
     && rm -rf /var/lib/apt/lists/*
 
 #Optional Instead of canonical pip install poetry, we are going to remove Cache later on anyways, but we might need it now.
@@ -40,6 +41,8 @@ ENV VIRTUAL_ENV=/app/.venv \
     PATH="/app/.venv/bin:$PATH"		
 
 WORKDIR /app
+
+ENV PYTHONPATH "${PYTHONPATH}:/app/src"
 
 #Copying the Venv from Builder Image at VIRTUAL_ENV Location to Runtime Image at VIRTUAL_ENV Location
 COPY --from=Builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}

@@ -1,0 +1,35 @@
+#docker compose -f ./MicroServices/FeaturePipeline/DockerComposeBundles/FeaturePipeline.yml up -d
+#docker compose -f ./MicroServices/FeaturePipeline/DockerComposeBundles/FeaturePipeline.yml down
+
+name: feature-pipeline
+
+networks:
+  redpanda_network:
+    name: redpanda-network
+    driver: bridge
+    external: true
+
+services:
+  trade-producer:
+    container_name: tradeproducer
+    build:
+      context: ../TradeProducer
+      dockerfile: TradeProducer.Dockerfile
+    networks:
+      - redpanda_network
+
+  trade-aggregator:
+    container_name: tradeaggregator
+    build:
+      context: ../OHLCTradeAggregator
+      dockerfile: TradeAggregator.Dockerfile
+    networks:
+      - redpanda_network
+
+  kafka-to-fs:
+    container_name: kafkatofs
+    build:
+      context: ../KafkaToFeatureStore
+      dockerfile: KafkaToFS.Dockerfile
+    networks:
+      - redpanda_network

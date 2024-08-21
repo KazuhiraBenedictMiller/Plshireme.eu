@@ -129,12 +129,17 @@ TerminalIntoKafkaToFS:
 # Bundles and Wrapped Up #
 #------------------------#
 
-StartUp: ComposeRedPanda RunTradeProducerContainer RunTradeAggregatorContainer RunKafkaToFSContainer
-	@echo "Containers Fired Up, here are the Logs"
-	docker ps -a
-	docker logs tradeproducer
-	docker logs tradeaggregator
-	docker logs kafkatofs
+# StartUp: ComposeRedPanda RunTradeProducerContainer RunTradeAggregatorContainer RunKafkaToFSContainer
+#	@echo "Containers Fired Up, here are the Logs"
+#	docker ps -a
+#	docker logs tradeproducer
+#	docker logs tradeaggregator
+#	docker logs kafkatofs
+
+ComposeFeaturePipeline:
+	@docker compose -f ./MicroServices/FeaturePipeline/DockerComposeBundles/FeaturePipeline.yml up -d
+
+StartUp: ComposeRedPanda ComposeFeaturePipeline
 
 ShutDown: RmTradeProducerImage RmTradeAggregatorImage RmKafkaToFSImage ShutDownRedPanda	
 	@echo "Everything Shat Down"

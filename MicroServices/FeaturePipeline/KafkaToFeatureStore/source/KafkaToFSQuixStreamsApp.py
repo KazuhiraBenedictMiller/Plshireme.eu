@@ -79,7 +79,7 @@ def KafkaToFS(
                 )
 
                 logger.info(
-                    f'Pushed Data {candledata}\nto Feature Group {feature_group_name} Version {feature_group_version}'
+                    f'Pushed Data {candledata}\ninto Feature Group {feature_group_name} Version {feature_group_version}'
                 )
 
                 # Store the offset of the processed message on the Consumer for the auto-commit mechanism.
