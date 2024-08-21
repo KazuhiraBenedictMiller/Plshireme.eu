@@ -2,7 +2,6 @@ from datetime import timedelta
 from typing import Dict
 
 from Config import Config
-
 from loguru import logger
 from quixstreams import Application
 

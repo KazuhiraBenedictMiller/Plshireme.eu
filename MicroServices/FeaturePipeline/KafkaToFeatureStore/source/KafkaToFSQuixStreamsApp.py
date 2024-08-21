@@ -1,9 +1,8 @@
 import json
 
-import Config
-from PushToFS import PushToFS
-
+from Config import Config
 from loguru import logger
+from PushToFS import PushToFS
 from quixstreams import Application
 
 
@@ -32,7 +31,7 @@ def KafkaToFS(
         consumer_group=Config.PushToFSConsumerGroup,
         # auto_create_reset='latest', #Forget about past Messages process from last one on
         auto_offset_reset='earliest',  # Process from the First Message Pushed to the Topic
-        auto_commit_enable=True,  # AutoCommitting is useful but you have to store the Message Offset
+        # auto_commit_enable=True  # AutoCommitting is useful but you have to store the Message Offset, Default=True
     )
 
     # Defining the Input Topic where Candles are saved
@@ -79,11 +78,15 @@ def KafkaToFS(
                     data=candledata,
                 )
 
-            # Store the offset of the processed message on the Consumer for the auto-commit mechanism.
-            # It will send it to Kafka in the background.
-            # Storing offset only after the message is processed enables at-least-once delivery guarantees.
-            # Used to Define the Last Processed Message in case of Infrastructure Failure
-            consumer.store_offsets(message=message)
+                logger.info(
+                    f'Pushed Data {candledata}\nto Feature Group {feature_group_name} Version {feature_group_version}'
+                )
+
+                # Store the offset of the processed message on the Consumer for the auto-commit mechanism.
+                # It will send it to Kafka in the background.
+                # Storing offset only after the message is processed enables at-least-once delivery guarantees.
+                # Used to Define the Last Processed Message in case of Infrastructure Failure
+                consumer.store_offsets(message=message)
 
 
 if __name__ == '__main__':

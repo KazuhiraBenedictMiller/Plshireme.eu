@@ -1,9 +1,8 @@
 from typing import Dict
 
-import Config
-
 import hopsworks
 import pandas as pd
+from Config import Config
 
 
 def PushToFS(feature_group_name: str, feature_group_version: int, data: Dict) -> None:
@@ -40,8 +39,14 @@ def PushToFS(feature_group_name: str, feature_group_version: int, data: Dict) ->
 
     # breakpoint()
 
+    # Transforming Dict Data from Key: Scalar to Key: List or Pandas will complain
+    # datadict = {key: [value] for key, value in data.items()}
+
     # Transforming Data into a Pandas DF
-    datadf = pd.DataFrame(data)
+    # datadf = pd.DataFrame(datadict)
+
+    # One-Liner
+    datadf = pd.DataFrame([data])
 
     # Insert Data into Feature Group
     featuregroup.insert(datadf)

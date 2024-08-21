@@ -13,8 +13,8 @@ class Configurations(BaseSettings):
     KafkaTopic: str = 'Candles'
     HopsworksAPIKey: str = os.environ['HopsworksAPIKey']
     HopsworksProjectName: str = os.environ['HopsworksProjectName']
-    FeatureGroupName: str = (os.environ['FeatureGroupName'],)
-    FeatureGroupVersion: int = (os.environ['FeatureGroupVersion'],)
+    FeatureGroupName: str = os.environ['FeatureGroupName']
+    FeatureGroupVersion: int = os.environ['FeatureGroupVersion']
 
 
 Config = Configurations()

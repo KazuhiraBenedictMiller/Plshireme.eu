@@ -11,6 +11,7 @@ ENV POETRY_NO_INTERACTION=1 \
 RUN pip install poetry==1.8.3
 
 WORKDIR /app
+
 #Copying Only Necessary Files
 COPY pyproject.toml poetry.lock ./
 
@@ -41,4 +42,4 @@ RUN pip install poetry==1.8.3 && cd /app && poetry install --no-cache --without 
 #Copying Actual Codebase
 COPY ./source /app
 
-ENTRYPOINT ["python", "source/KafkaToFSQuixStreamsApp.py]
+ENTRYPOINT ["python", "source/KafkaToFSQuixStreamsApp.py"]

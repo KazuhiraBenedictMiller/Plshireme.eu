@@ -94,8 +94,9 @@ TerminalIntoTradeAggregator:
 # MicroServices -  KafkaToFeatureStore #
 #--------------------------------------#
 
+#Similar Command to BuildLiteKafkaToFS but had to manage dependencies through multi-stage Docker Build
 BuildKafkaToFSContainer:
-	docker build -t kafkatofs ./MicroServices/FeaturePipeline/KafkaToFeatureStore -f ./MicroServices/FeaturePipeline/KafkaToFeatureStore/KafkaToFS.Dockerfile
+	DOCKER_BUILDKIT=1 docker build --target=Runtime -t kafkatofs ./MicroServices/FeaturePipeline/KafkaToFeatureStore -f ./MicroServices/FeaturePipeline/KafkaToFeatureStore/KafkaToFS.Dockerfile
 
 RunKafkaToFSContainer: ComposeRedPanda BuildKafkaToFSContainer
 	docker run --network redpanda-network --name kafkatofs -d -it kafkatofs
